@@ -44,3 +44,101 @@ foreign key(ssn) references employee(ssn),
 foreign key(pno) references project(pno),
 primary key (ssn, pno)
 );
+
+
+
+
+
+insert into employee (ssn, fname, lname, address, sex, salary) values
+('kitise01','james','smith','bangalore','m', 500000);
+insert into employee (ssn, fname, lname, address, sex, salary) values
+('kitise02','heabg','baker','bangalore','m', 700000);
+insert into employee (ssn, fname, lname, address, sex, salary) values
+('kitise03','edward','scott','mysore','m', 500000);
+insert into employee (ssn, fname, lname, address, sex, salary) values
+('kitise04','pavan','hegde','mangalore','m', 650000);
+insert into employee (ssn, fname, lname, address, sex, salary) values
+('kitise05','girish','malya','mysore','m', 450000);
+insert into employee (ssn, fname, lname, address, sex, salary) values
+('kitise06','alia','bhatt','mumbai','f', 1500000);
+insert into employee (ssn, fname, lname, address, sex, salary) values
+('kitise07','shreya','ghoshal','mumbai','f', 1500000);
+insert into department values ('5','accounts','kitise01','01-jan-01');
+insert into department values ('2','it','kitise02','01-aug-16');
+insert into department values ('3','ece','kitise03','01-jun-08');
+insert into department values ('4','ise','kitise04','01-aug-15');
+insert into department values ('1','cse','kitise05','01-jun-02');
+Note: update entries of employee table to fill missing fields superssn and dno
+update employee set superssn='kitise01', dno='5' where ssn='kitise01';
+update employee set superssn='kitise02', dno='5' where ssn='kitise02';
+update employee set superssn='kitise03', dno='5' where ssn='kitise03';
+update employee set superssn='kitise03', dno='1' where ssn='kitise03';
+update employee set superssn='kitise04', dno='5' where ssn='kitise04';
+update employee set superssn='kitise05', dno='5' where ssn='kitise05';
+update employee set superssn='kitise06', dno='5' where ssn='kitise06';
+update employee set superssn='kitise07', dno='5' where ssn='kitise07';
+
+
+insert into dlocation values ( '1', 'bangalore');
+insert into dlocation values ('2', 'bangalore');
+insert into dlocation values ('3', 'bangalore');
+insert into dlocation values ('4', 'mangalore');
+insert into dlocation values ('5', 'mangalore');
+insert into project values (101,'cloud','bangalore','5');
+insert into project values (102,'bigdata','bangalore','4');
+insert into project values (103,'sensors','bangalore','2');
+insert into project values (104,'bank management','bangalore','3');
+insert into project values (105,'iot','bangalore','1');
+insert into works_on values (6, 'kitise01', 101);
+insert into works_on values (8, 'kitise03', 102);
+insert into works_on values (10, 'kitise02', 103);
+insert into works_on values (3, 'kitise04', 103);
+insert into works_on values (4, 'kitise05', 105);
+
+(
+select distinct p.pno
+from project p, department d, employee e
+where e.dno=d.dno and d.mgrssn=e.ssn and e.lname='scott'
+)
+union
+(
+select distinct p1.pno
+from project p1, works_on w, employee e1
+where p1.pno=w.pno and e1.ssn=w.ssn and e1.lname='scott');
+
+select e.fname, e.lname, 1.1*e.salary as incr_sal
+from employee e, works_on w, project p
+where e.ssn=w.ssn and w.pno=p.pno and p.pname='iot';
+
+select sum(e.salary), max(e.salary), min(e.salary), avg (e.salary)
+from employee e, department d
+where e.dno=d.dno and d.dname='accounts';
+
+select e.fname, e.lname
+from employee e
+where not exists
+(
+(
+select pno
+from project
+where dno='5'
+)
+minus
+(
+select pno
+from works_on
+where e.ssn=ssn
+)
+);
+
+select d.dno, count (*)
+from department d, employee e
+where d.dno=e.dno and e.salary>600000
+and d.dno in
+(
+select e1.dno
+from employee e1
+group by e1.dno
+having count (*)>5
+)
+group by d.dno;
