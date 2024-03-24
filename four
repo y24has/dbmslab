@@ -1,1 +1,44 @@
+create table student
+(
+usn varchar(10) primary key,
+sname varchar(25),
+address varchar(25),
+phone number (10),
+gender varchar (1)
+);
+create table semsec
+(
+ssid varchar(5) primary key,
+sem number (2),
+sec varchar(1)
+);
+create table class
+(
+usn varchar(10),
+ssid varchar(5),
+foreign key(usn) references student(usn),
+foreign key(ssid) references semsec(ssid),
+primary key (usn, ssid)
+);
+create table course
+(
+subcode varchar(8) primary key,
+title varchar(20),
+sem number(2),
+credits number(2)
+);
+create table iamarks
+(
+usn varchar(10),
+subcode varchar(8),
+ssid varchar(5),
+test1 number(2),
+test2 number(2),
+test3 number(2),
+finalia number(2),
+foreign key(usn) references student(usn),
+foreign key(subcode) references course(subcode),
+foreign key(ssid) references semsec(ssid),
+primary key (usn, subcode, ssid)
+);
 
