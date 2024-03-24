@@ -1,0 +1,55 @@
+create table publisher
+(
+pub_name varchar2(20) primary key,
+phone number(10),
+address varchar2(20)
+);
+
+
+create table book
+(
+book_id number(5) primary key,
+title varchar2(20),
+pub_year varchar2(20),
+pub_name varchar2(20),
+foreign key(pub_name) references publisher(pub_name) on delete cascade
+);
+create table book_authors
+(
+author_name varchar2(20),
+book_id number(5),
+foreign key(book_id) references book(book_id) on delete cascade,
+primary key(book_id, author_name)
+);
+create table library_programme
+(
+programme_id number(5) primary key,
+programme_name varchar2(20),
+address varchar2(20)
+);
+create table card
+(
+card_no number(5) primary key
+);
+create table book_copies
+(
+no_of_copies number(5),
+book_id number(5),
+programme_id number(5),
+foreign key(book_id) references book(book_id) on delete cascade,
+foreign key(programme_id) references library_programme(programme_id) on delete cascade,
+primary key (book_id, programme_id)
+);
+
+create table book_lending
+(
+date_out date,
+due_date date,
+book_id number(5),
+programme_id number(5),
+card_no number(5),
+foreign key(book_id) references book(book_id) on delete cascade,
+foreign key(programme_id) references library_programme(programme_id) on delete cascade,
+foreign key(card_no) references card(card_no) on delete cascade,
+primary key (book_id, programme_id, card_no)
+);
