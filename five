@@ -1,0 +1,46 @@
+create table department
+(
+dno varchar(5) primary key,
+dname varchar(15),
+mgrssn varchar(10),
+mgrstartdate date
+);
+create table employee
+(
+ssn varchar(10) primary key,
+fname varchar(10),
+lname varchar(10),
+address varchar(20),
+sex char(1),
+salary number(10,3),
+superssn varchar(10),
+dno varchar(5),
+foreign key(superssn) references employee(ssn) on delete cascade,
+foreign key(dno) references department(dno) on delete cascade
+);
+alter table department
+add foreign key(mgrssn) references employee(ssn) on delete cascade;
+create table dlocation
+(
+dno varchar(5),
+dloc varchar(15),
+foreign key(dno) references department(dno),
+primary key (dno, dloc)
+);
+create table project
+(
+pno number(5) primary key,
+pname varchar(15),
+plocation varchar(15),
+dno varchar(5),
+foreign key(dno) references department(dno)
+);
+create table works_on
+(
+hours number(2),
+ssn varchar(10),
+pno number(5),
+foreign key(ssn) references employee(ssn),
+foreign key(pno) references project(pno),
+primary key (ssn, pno)
+);
